@@ -1,22 +1,15 @@
-let express = require('express');
-let mongodb = require('mongodb')
-let client = mongodb.MongoClient;
+const express = require('express');
+const { getDB, getCollection} = require('./dbconnection')
 
-let InsertData = express.Router().post("/",(req,res)=>{
-    client.connect("mongodb://localhost:27017/employee",(err,db)=>{
-        if(err){
-            throw err
-        }else{
-           db.collection("employeeDetails").insertMany(req.body,(err,result)=>{
-            if(err){
-                throw err
-            }else{
-                res.send(result)
-            }
-           })
-        }
-    })
-
-})
+const InsertData = express.Router().post("/", async (req, res) => {
+    try {
+        const collection = getCollection()
+        const result = await collection.insertMany(req.body);
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 module.exports = InsertData;

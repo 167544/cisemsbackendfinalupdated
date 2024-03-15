@@ -1,22 +1,15 @@
-let express = require('express');
-let mongodb = require('mongodb')
-let client = mongodb.MongoClient;
+const express = require('express');
+const { getCollection } = require('./dbconnection');
 
-let fetch = express.Router().get("/",(req,res)=>{
-    client.connect("mongodb://localhost:27017/employee",(err,db)=>{
-        if(err){
-            throw err
-        }else{
-           db.collection("employeeDetails").find().toArray((err,result)=>{
-            if(err){
-                throw err
-            }else{
-                res.send(result)
-            }
-           })
-        }
-    })
-
-})
+const fetch = express.Router().get("/", async (req, res) => {
+    try {
+        const collection = getCollection();
+        const result = await collection.find().toArray();
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 module.exports = fetch;
