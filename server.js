@@ -30,7 +30,6 @@ app.use('/fetchdata',require('./Routes/fetch'))
 
 app.use('/fetchbasedOnCondition',require('./Routes/fetchBasedOnRequirement'))
 
-
 app.use('/employeedata',require('./Routes/InsertData'))
 
 app.use('/addtoshortlist',require('./Routes/Addtoshortlist'));
